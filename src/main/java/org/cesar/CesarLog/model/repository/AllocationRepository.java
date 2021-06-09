@@ -6,11 +6,11 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface AllocationRepository extends CrudRepository<Allocation, Integer> {
 	
-	//@Query("select a from Allocation a where a.Equipment.Project.id =?1")
-	//Optional<Allocation> findByProject(int projectId);
+	@Query("select a from Allocation a where a.employee.project.id =?1")
+	Iterable<Allocation> findByProject(int id);
 	
 	//@Query(value = "select * from allocation a where a.employee_id =?1", nativeQuery = true)
 	@Query("select a from Allocation a where a.employee.id =?1")
-	Iterable<Allocation> findByEmployee(int projectId);
+	Iterable<Allocation> findByEmployee(int id);
 	
 }

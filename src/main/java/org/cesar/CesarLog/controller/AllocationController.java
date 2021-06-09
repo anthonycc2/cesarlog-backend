@@ -52,6 +52,11 @@ public class AllocationController {
 		return repository.findByEmployee(id);
 	}
 	
+	@GetMapping(path = "/project/{id}")
+	public @ResponseBody Iterable<Allocation> listByProject(@PathVariable(required = true, name="id") int id) {
+		return repository.findByProject(id);
+	}
+	
 	@GetMapping(path = "/get/{id}")
 	public @ResponseBody Optional<Allocation> recover(@PathVariable(required = true, name="id") int id) {
 			return repository.findById(id);
