@@ -1,4 +1,4 @@
-package org.cesar.CesarLog.controller;
+package org.cesar.CesarLog.controller.service;
 
 import javax.mail.internet.MimeMessage;
 

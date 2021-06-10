@@ -42,6 +42,11 @@ public class EmployeeController {
 		return repository.findAll();
 	}
 	
+	@GetMapping(path = "/project/{id}")
+	public @ResponseBody Iterable<Employee> listByProject(@PathVariable(required = true, name="id") int id) {
+		return repository.findByProject(id);
+	}
+	
 	@GetMapping(path = "/get/{id}")
 	public @ResponseBody Optional<Employee> recover(@PathVariable(required = true, name="id") int id) {
 			return repository.findById(id);

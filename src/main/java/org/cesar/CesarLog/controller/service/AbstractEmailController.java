@@ -1,12 +1,13 @@
-package org.cesar.CesarLog.controller;
+package org.cesar.CesarLog.controller.service;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.cesar.CesarLog.model.entity.Employee;
+import org.cesar.CesarLog.model.entity.Equipment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -17,7 +18,7 @@ import org.thymeleaf.context.Context;
 
 public abstract class AbstractEmailController implements EmailController {
 	
-//	default.sender=${MAIL_USERNAME}
+	//default.sender=${MAIL_USERNAME}
 	@Value("${default.sender}")
 	private String sender;
 		
@@ -54,23 +55,24 @@ public abstract class AbstractEmailController implements EmailController {
 		return sm;
 	}
 	
-	protected String htmlFromTemplateEmployee(Employee obj) {
+	protected String htmlFromTemplateEmployee(Employee obj, ArrayList<Equipment> equipments) {
 		Context context = new Context();
 		context.setVariable("employee", obj);
+		context.setVariable("equipments", equipments);
 		return templateEngine.process("email/alertEmail", context);
 	}
 	
 	@Override
-	public void sendAlertHtmlEmail(Employee obj) {
+	public void sendAlertHtmlEmail(Employee obj, ArrayList<Equipment> equipments) {
 		try {
-			MimeMessage mm = prepareMimeMessageFromEmployee(obj);
+			MimeMessage mm = prepareMimeMessageFromEmployee(obj, equipments);
 			sendHtmlEmail(mm);
 		} catch (MessagingException e) {
 			sendAlertEmail(obj);
 		}
 	}
 
-	protected MimeMessage prepareMimeMessageFromEmployee(Employee employee) throws MessagingException {
+	protected MimeMessage prepareMimeMessageFromEmployee(Employee employee, ArrayList<Equipment> equipments) throws MessagingException {
 		
 		/*Integer accountId = employee.getAccountId();
 		Account account = accountService.findById(accountId);
@@ -84,7 +86,7 @@ public abstract class AbstractEmailController implements EmailController {
 		mmh.setFrom(sender);
 		mmh.setSubject("Alerta de alocação de equipamento");
 		mmh.setSentDate(new Date(System.currentTimeMillis()));
-		mmh.setText(htmlFromTemplateEmployee(employee), true);
+		mmh.setText(htmlFromTemplateEmployee(employee, equipments), true);
 
 		return mimeMessage;
 	}
